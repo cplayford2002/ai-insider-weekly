@@ -45,7 +45,7 @@ jobs:
             "substack_publication_url": "${{ secrets.SUBSTACK_PUBLICATION }}",
             "substack_session_cookie": "${{ secrets.SUBSTACK_COOKIE }}",
             "github_token": "${{ secrets.GH_PAGES_TOKEN }}",
-            "github_repo": "${{ secrets.GITHUB_REPO }}",
+            "GH_REPO": "${{ secrets.GH_REPO }}",
             "twitter_api_key": "${{ secrets.TWITTER_API_KEY }}",
             "twitter_api_secret": "${{ secrets.TWITTER_API_SECRET }}",
             "twitter_access_token": "${{ secrets.TWITTER_ACCESS_TOKEN }}",
