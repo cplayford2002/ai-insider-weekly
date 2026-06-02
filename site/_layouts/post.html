@@ -1,0 +1,56 @@
+---
+layout: default
+---
+
+<main>
+  <article>
+    <header class="post-header">
+      <div style="margin-bottom: 0.75rem;">
+        {% for tag in page.tags limit: 2 %}
+        <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+                     letter-spacing: 0.05em; color: var(--accent); margin-right: 0.75rem;">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      <h1>{{ page.title }}</h1>
+      <p class="post-meta">
+        {{ page.date | date: "%B %-d, %Y" }} ·
+        {{ content | number_of_words | divided_by: 200 | plus: 1 }} min read
+      </p>
+    </header>
+
+    <div class="post-body">
+      {{ content }}
+    </div>
+
+    <!-- Affiliate CTA — inserted automatically based on post tags -->
+    {% if site.data.affiliates %}
+    {% for affiliate in site.data.affiliates %}
+    {% if page.tags contains affiliate.tag %}
+    <div class="affiliate-cta">
+      <h3>{{ affiliate.headline }}</h3>
+      <p>{{ affiliate.description }}</p>
+      <a href="{{ affiliate.url }}" class="cta-btn" rel="sponsored noopener" target="_blank">
+        {{ affiliate.cta_text }} →
+      </a>
+      <p class="disclosure">Affiliate link — we earn a small commission if you sign up, at no cost to you.</p>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--border);" />
+
+    <div style="background: var(--accent-light); border-radius: 10px; padding: 1.5rem; text-align: center;">
+      <p style="font-weight: 600; margin-bottom: 0.5rem;">Enjoyed this? Get it weekly, free.</p>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem;">
+        AI Insider Weekly lands in your inbox every Tuesday.
+      </p>
+      <a href="{{ site.substack_url }}" target="_blank" rel="noopener"
+         style="display: inline-block; padding: 0.7rem 1.5rem; background: var(--accent);
+                color: #fff; border-radius: 6px; font-weight: 600;">
+        Subscribe free →
+      </a>
+    </div>
+
+  </article>
+</main>

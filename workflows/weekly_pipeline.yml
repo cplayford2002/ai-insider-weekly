@@ -1,0 +1,110 @@
+name: Weekly Newsletter Pipeline
+
+on:
+  schedule:
+    # Every Tuesday at 7:00 AM UTC (runs research+writing ahead of 9am send)
+    - cron: "0 7 * * 2"
+  workflow_dispatch:
+    inputs:
+      auto_publish:
+        description: "Publish immediately without review?"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+jobs:
+  generate-newsletter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create config from secrets
+        run: |
+          mkdir -p config
+          cat > config/config.json << 'CONFIGEOF'
+          {
+            "newsletter_name": "AI Insider Weekly",
+            "site_url": "${{ secrets.SITE_URL }}",
+            "substack_url": "${{ secrets.SUBSTACK_URL }}",
+            "openai_api_key": "${{ secrets.OPENAI_API_KEY }}",
+            "substack_publication_url": "${{ secrets.SUBSTACK_PUBLICATION }}",
+            "substack_session_cookie": "${{ secrets.SUBSTACK_COOKIE }}",
+            "github_token": "${{ secrets.GH_PAGES_TOKEN }}",
+            "github_repo": "${{ secrets.GITHUB_REPO }}",
+            "twitter_api_key": "${{ secrets.TWITTER_API_KEY }}",
+            "twitter_api_secret": "${{ secrets.TWITTER_API_SECRET }}",
+            "twitter_access_token": "${{ secrets.TWITTER_ACCESS_TOKEN }}",
+            "twitter_access_secret": "${{ secrets.TWITTER_ACCESS_SECRET }}",
+            "linkedin_access_token": "${{ secrets.LINKEDIN_ACCESS_TOKEN }}",
+            "linkedin_person_urn": "${{ secrets.LINKEDIN_PERSON_URN }}",
+            "affiliate_tools": ${{ secrets.AFFILIATE_TOOLS_JSON }},
+            "auto_publish": ${{ github.event.inputs.auto_publish || 'false' }}
+          }
+          CONFIGEOF
+        
+      - name: Restore issue counter
+        uses: actions/cache@v4
+        with:
+          path: config/issue_counter.json
+          key: issue-counter-${{ github.run_number }}
+          restore-keys: issue-counter-
+
+      - name: Run pipeline
+        working-directory: agents
+        run: |
+          mkdir -p ../logs ../drafts ../output/newsletters ../output/posts
+          if [ "${{ github.event.inputs.auto_publish }}" = "true" ]; then
+            python orchestrator.py --auto
+          else
+            python orchestrator.py
+
+      - name: Upload draft for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: newsletter-draft-${{ github.run_number }}
+          path: |
+            drafts/
+            output/
+          retention-days: 7
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pipeline-logs-${{ github.run_number }}
+          path: logs/
+          retention-days: 3
+
+      - name: Save issue counter
+        uses: actions/cache/save@v4
+        with:
+          path: config/issue_counter.json
+          key: issue-counter-${{ github.run_number }}
+
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Pipeline failed — run #${{ github.run_number }}`,
+              body: `The weekly newsletter pipeline failed. [View logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`,
+              labels: ['pipeline-failure']
+            })

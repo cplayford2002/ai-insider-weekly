@@ -1,0 +1,56 @@
+---
+layout: default
+title: Home
+---
+
+<section class="hero">
+  <h1>AI tools that actually work.<br>In your inbox every Tuesday.</h1>
+  <p>Practical AI insights for professionals who want to stay ahead without the hype. 
+     5 minutes. Free forever.</p>
+  <form class="sub-form" action="{{ site.substack_url }}/subscribe" method="get" target="_blank">
+    <input type="email" name="email" placeholder="your@email.com" required />
+    <button type="submit">Subscribe free →</button>
+  </form>
+  <p class="sub-note">Join {{ site.subscriber_count | default: "1,000+" }} readers. Unsubscribe anytime.</p>
+</section>
+
+<main>
+
+  <section style="margin-bottom: 3rem;">
+    <h2 style="font-size: 1.4rem; margin-bottom: 1.5rem;">Latest from the blog</h2>
+    <div class="post-grid">
+      {% for post in site.posts limit: 6 %}
+      <article class="post-card">
+        {% if post.tags.first %}
+        <div class="tag">{{ post.tags.first }}</div>
+        {% endif %}
+        <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+        <p class="excerpt">{{ post.description | default: post.excerpt | strip_html | truncate: 140 }}</p>
+        <div class="meta">{{ post.date | date: "%B %-d, %Y" }} · {{ post.content | number_of_words | divided_by: 200 | plus: 1 }} min read</div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section style="background: var(--surface); border-radius: 12px; padding: 2rem; text-align: center; margin-bottom: 3rem;">
+    <h2 style="margin-bottom: 0.75rem;">Why readers love AI Insider Weekly</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; text-align: left;">
+      <div>
+        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚡</div>
+        <strong>5-minute read</strong>
+        <p style="font-size: 0.9rem; color: var(--muted); margin-top: 0.25rem;">Curated, not padded. We respect your time.</p>
+      </div>
+      <div>
+        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎯</div>
+        <strong>Actually actionable</strong>
+        <p style="font-size: 0.9rem; color: var(--muted); margin-top: 0.25rem;">Every issue has a tip you can use today.</p>
+      </div>
+      <div>
+        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</div>
+        <strong>No hype</strong>
+        <p style="font-size: 0.9rem; color: var(--muted); margin-top: 0.25rem;">We cover what's real, not what's trending.</p>
+      </div>
+    </div>
+  </section>
+
+</main>

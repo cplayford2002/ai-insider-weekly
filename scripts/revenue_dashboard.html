@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Insider Weekly — Revenue Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8f8f6;color:#1a1a1a;padding:2rem 1rem}
+h1{font-size:1.4rem;font-weight:700;margin-bottom:0.25rem}
+.subtitle{color:#666;font-size:0.9rem;margin-bottom:2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
+.card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:1.25rem}
+.card label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;color:#888;display:block;margin-bottom:0.4rem}
+.card .val{font-size:1.8rem;font-weight:700}
+.card .sub{font-size:0.8rem;color:#888;margin-top:0.25rem}
+.card.highlight{border-color:#0f4c81;background:#e8f0f8}
+.card.highlight .val{color:#0f4c81}
+.section{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
+.section h2{font-size:1rem;font-weight:600;margin-bottom:1rem}
+table{width:100%;border-collapse:collapse;font-size:0.9rem}
+th{text-align:left;padding:0.5rem 0.75rem;border-bottom:2px solid #e5e5e5;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.04em;color:#888}
+td{padding:0.6rem 0.75rem;border-bottom:1px solid #f0f0f0}
+tr:last-child td{border:none}
+input[type=number]{width:90px;padding:0.3rem 0.5rem;border:1px solid #ddd;border-radius:5px;font-size:0.9rem}
+.progress-bar{height:8px;background:#e5e5e5;border-radius:4px;overflow:hidden;margin-top:0.5rem}
+.progress-fill{height:100%;background:#0f4c81;border-radius:4px;transition:width 0.4s}
+.tag{display:inline-block;padding:0.15rem 0.5rem;border-radius:4px;font-size:0.75rem;font-weight:600}
+.tag.green{background:#e6f4ea;color:#1a7f3c}
+.tag.amber{background:#fff3cd;color:#856404}
+.tag.blue{background:#e8f0f8;color:#0f4c81}
+</style>
+</head>
+<body>
+
+<h1>AI Insider Weekly — Revenue Dashboard</h1>
+<p class="subtitle">Track your path to $1,000/week. Update numbers as you go.</p>
+
+<div class="grid">
+  <div class="card highlight">
+    <label>Weekly revenue</label>
+    <div class="val" id="total-weekly">$0</div>
+    <div class="sub">Target: $1,000/wk</div>
+    <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+  </div>
+  <div class="card">
+    <label>Monthly revenue</label>
+    <div class="val" id="total-monthly">$0</div>
+    <div class="sub">Target: $4,333/mo</div>
+  </div>
+  <div class="card">
+    <label>Total subscribers</label>
+    <div class="val" id="total-subs">0</div>
+    <div class="sub">Free + paid</div>
+  </div>
+  <div class="card">
+    <label>Paid subscribers</label>
+    <div class="val" id="paid-subs">0</div>
+    <div class="sub" id="paid-rev-note">$0/mo</div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Revenue streams — enter your current numbers</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Stream</th>
+        <th>Your value</th>
+        <th>Unit</th>
+        <th>Weekly $</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Affiliate commissions</strong><br><small style="color:#888">Avg $50/conversion</small></td>
+        <td><input type="number" id="aff-conv" value="0" min="0" oninput="recalc()"/></td>
+        <td>conversions/wk</td>
+        <td id="aff-rev">$0</td>
+        <td><span class="tag amber" id="aff-tag">Not started</span></td>
+      </tr>
+      <tr>
+        <td><strong>Paid subscriptions</strong><br><small style="color:#888">$9/mo Substack</small></td>
+        <td><input type="number" id="paid-sub-count" value="0" min="0" oninput="recalc()"/></td>
+        <td>paid subs</td>
+        <td id="sub-rev">$0</td>
+        <td><span class="tag amber" id="sub-tag">Not started</span></td>
+      </tr>
+      <tr>
+        <td><strong>Newsletter sponsorships</strong><br><small style="color:#888">Per sponsored slot</small></td>
+        <td><input type="number" id="sponsor-val" value="0" min="0" oninput="recalc()"/></td>
+        <td>$/issue</td>
+        <td id="sponsor-rev">$0</td>
+        <td><span class="tag amber" id="sponsor-tag">Not started</span></td>
+      </tr>
+      <tr>
+        <td><strong>Display ads</strong><br><small style="color:#888">Optional, adds later</small></td>
+        <td><input type="number" id="ads-val" value="0" min="0" oninput="recalc()"/></td>
+        <td>$/month</td>
+        <td id="ads-rev">$0</td>
+        <td><span class="tag blue" id="ads-tag">Later stage</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h2>Growth milestones</h2>
+  <table>
+    <thead><tr><th>Milestone</th><th>Target</th><th>Your current</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>First 100 free subscribers</td>
+        <td>100</td>
+        <td><input type="number" id="ms-subs" value="0" min="0" oninput="recalc()"/> subs</td>
+        <td><span class="tag" id="ms1-tag">0%</span></td>
+      </tr>
+      <tr>
+        <td>First affiliate conversion</td>
+        <td>1 sale</td>
+        <td><input type="number" id="ms-aff" value="0" min="0" oninput="recalc()"/> sales</td>
+        <td><span class="tag" id="ms2-tag">Pending</span></td>
+      </tr>
+      <tr>
+        <td>First 500 free subscribers</td>
+        <td>500</td>
+        <td id="ms3-cur">— (from above)</td>
+        <td><span class="tag" id="ms3-tag">0%</span></td>
+      </tr>
+      <tr>
+        <td>Launch paid tier ($9/mo)</td>
+        <td>25 paid subs</td>
+        <td><span id="ms4-cur">0</span> paid</td>
+        <td><span class="tag" id="ms4-tag">Pending</span></td>
+      </tr>
+      <tr>
+        <td>First sponsorship deal</td>
+        <td>$200/issue</td>
+        <td><span id="ms5-cur">$0</span>/issue</td>
+        <td><span class="tag" id="ms5-tag">After 1k subs</span></td>
+      </tr>
+      <tr>
+        <td>$1,000/week target</td>
+        <td>$1,000/wk</td>
+        <td id="ms6-cur">$0/wk</td>
+        <td><span class="tag" id="ms6-tag">In progress</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h2>Cost breakdown (monthly)</h2>
+  <table>
+    <tbody>
+      <tr><td>Anthropic API (Claude for ~4 newsletters + 12 posts)</td><td style="text-align:right;color:#1a7f3c">~$8/mo</td></tr>
+      <tr><td>Substack (free until you earn, then 10% of paid subs)</td><td style="text-align:right">$0 → ~$40/mo at target</td></tr>
+      <tr><td>GitHub Actions + Pages</td><td style="text-align:right;color:#1a7f3c">$0 free</td></tr>
+      <tr><td>n8n Cloud (optional visual workflow)</td><td style="text-align:right;color:#1a7f3c">$0 free tier</td></tr>
+      <tr><td><strong>Total running cost</strong></td><td style="text-align:right"><strong>~$8–$50/mo</strong></td></tr>
+      <tr><td><strong>Net at $1k/wk target</strong></td><td style="text-align:right"><strong style="color:#1a7f3c">~$950+/week profit</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+function recalc(){
+  const affConv=+document.getElementById('aff-conv').value||0;
+  const paidSubs=+document.getElementById('paid-sub-count').value||0;
+  const sponsorVal=+document.getElementById('sponsor-val').value||0;
+  const adsVal=+document.getElementById('ads-val').value||0;
+  const msSubs=+document.getElementById('ms-subs').value||0;
+  const msAff=+document.getElementById('ms-aff').value||0;
+
+  const affWeekly=affConv*50;
+  const subWeekly=(paidSubs*9)/4.33;
+  const sponsorWeekly=sponsorVal;
+  const adsWeekly=adsVal/4.33;
+  const total=affWeekly+subWeekly+sponsorWeekly+adsWeekly;
+  const totalMonthly=total*4.33;
+
+  document.getElementById('aff-rev').textContent='$'+Math.round(affWeekly);
+  document.getElementById('sub-rev').textContent='$'+Math.round(subWeekly);
+  document.getElementById('sponsor-rev').textContent='$'+Math.round(sponsorWeekly);
+  document.getElementById('ads-rev').textContent='$'+Math.round(adsWeekly);
+  document.getElementById('total-weekly').textContent='$'+Math.round(total).toLocaleString();
+  document.getElementById('total-monthly').textContent='$'+Math.round(totalMonthly).toLocaleString();
+  document.getElementById('total-subs').textContent=msSubs.toLocaleString();
+  document.getElementById('paid-subs').textContent=paidSubs.toLocaleString();
+  document.getElementById('paid-rev-note').textContent='$'+Math.round(paidSubs*9)+'/mo';
+  document.getElementById('ms4-cur').textContent=paidSubs;
+  document.getElementById('ms5-cur').textContent='$'+sponsorVal;
+  document.getElementById('ms6-cur').textContent='$'+Math.round(total)+'/wk';
+
+  const pct=Math.min(100,Math.round((total/1000)*100));
+  document.getElementById('prog').style.width=pct+'%';
+
+  setTag('aff-tag',affWeekly,'$'+Math.round(affWeekly)+'/wk');
+  setTag('sub-tag',subWeekly,'$'+Math.round(subWeekly)+'/wk');
+  setTag('sponsor-tag',sponsorWeekly,'$'+Math.round(sponsorWeekly)+'/wk');
+  setTag('ads-tag',adsWeekly,'$'+Math.round(adsWeekly)+'/wk',true);
+
+  setMilestone('ms1-tag',msSubs,100);
+  setMilestone('ms3-tag',msSubs,500);
+  document.getElementById('ms2-tag').textContent=msAff>0?'Done':'Pending';
+  document.getElementById('ms2-tag').className='tag '+(msAff>0?'green':'amber');
+  setMilestone('ms4-tag',paidSubs,25);
+  setMilestone('ms6-tag',Math.round(total),1000);
+}
+
+function setTag(id,val,label,isOptional=false){
+  const el=document.getElementById(id);
+  if(val===0){el.textContent=isOptional?'Later stage':'Not started';el.className='tag '+(isOptional?'blue':'amber');}
+  else{el.textContent=label;el.className='tag green';}
+}
+
+function setMilestone(id,val,target){
+  const el=document.getElementById(id);
+  const pct=Math.round(Math.min(100,(val/target)*100));
+  el.textContent=pct===100?'Done':pct+'%';
+  el.className='tag '+(pct>=100?'green':pct>0?'blue':'amber');
+}
+
+recalc();
+</script>
+</body>
+</html>

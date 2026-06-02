@@ -1,0 +1,60 @@
+{
+  "_comment": "AI Insider Weekly — Configuration. Fill in your values. See SETUP.md for instructions.",
+
+  "newsletter_name": "AI Insider Weekly",
+  "site_url": "https://YOUR_GITHUB_USERNAME.github.io/ai-insider-weekly",
+  "substack_url": "https://aiinsiderweekly.substack.com",
+
+  "openai_api_key": "YOUR_OPENAI_API_KEY",
+
+  "substack_publication_url": "aiinsiderweekly",
+  "substack_session_cookie": "YOUR_SUBSTACK_SESSION_COOKIE",
+
+  "github_token": "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN",
+  "github_repo": "YOUR_GITHUB_USERNAME/ai-insider-weekly",
+
+  "twitter_bearer_token": "YOUR_TWITTER_BEARER_TOKEN",
+  "twitter_api_key": "YOUR_TWITTER_API_KEY",
+  "twitter_api_secret": "YOUR_TWITTER_API_SECRET",
+  "twitter_access_token": "YOUR_TWITTER_ACCESS_TOKEN",
+  "twitter_access_secret": "YOUR_TWITTER_ACCESS_SECRET",
+
+  "linkedin_access_token": "YOUR_LINKEDIN_ACCESS_TOKEN",
+  "linkedin_person_urn": "urn:li:person:YOUR_LINKEDIN_ID",
+
+  "affiliate_tools": [
+    {
+      "name": "Claude Pro",
+      "description": "Anthropic's Claude AI — best for writing, coding, analysis",
+      "affiliate_url": "YOUR_CLAUDE_AFFILIATE_LINK",
+      "commission": "$20 per signup"
+    },
+    {
+      "name": "Perplexity AI",
+      "description": "AI-powered search engine, replaces Google for research",
+      "affiliate_url": "YOUR_PERPLEXITY_AFFILIATE_LINK",
+      "commission": "$10 per trial + 20% recurring"
+    },
+    {
+      "name": "Notion AI",
+      "description": "AI-enhanced workspace for notes, docs, databases",
+      "affiliate_url": "YOUR_NOTION_AFFILIATE_LINK",
+      "commission": "20% recurring commission"
+    },
+    {
+      "name": "Jasper AI",
+      "description": "AI writing assistant for marketing teams",
+      "affiliate_url": "YOUR_JASPER_AFFILIATE_LINK",
+      "commission": "25% recurring for 12 months"
+    }
+  ],
+
+  "schedule": {
+    "newsletter_day": "tuesday",
+    "newsletter_time_utc": "09:00",
+    "social_delay_hours": 2
+  },
+
+  "auto_publish": false,
+  "_auto_publish_note": "Set to true ONLY after you've reviewed several issues and trust the output quality"
+}

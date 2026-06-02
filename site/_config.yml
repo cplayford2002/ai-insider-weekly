@@ -1,0 +1,20 @@
+title: "AI Insider Weekly"
+description: "Practical AI insights for professionals. Free newsletter every Tuesday."
+substack_url: "https://aiinsiderweekly.substack.com"
+url: "https://YOUR_GITHUB_USERNAME.github.io"
+baseurl: "/ai-insider-weekly"
+subscriber_count: "2,400+"
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+markdown: kramdown
+permalink: /blog/:slug/
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - README.md

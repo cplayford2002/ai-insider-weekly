@@ -1,0 +1,20 @@
+- name: Claude Pro
+  tag: claude
+  headline: "The AI writing assistant that actually thinks"
+  description: "If this post saved you time, imagine having Claude for every task. Claude Pro gives you priority access, longer context, and access to the most capable models."
+  url: YOUR_CLAUDE_AFFILIATE_LINK
+  cta_text: Try Claude Pro free
+
+- name: Perplexity AI
+  tag: research
+  headline: "Search the web like it's 2025"
+  description: "Perplexity replaces hours of tab-hopping with cited, synthesised answers. The Pro plan gives you GPT-4 and Claude-powered deep research."
+  url: YOUR_PERPLEXITY_AFFILIATE_LINK
+  cta_text: Try Perplexity Pro
+
+- name: Notion AI
+  tag: productivity
+  headline: "Your workspace, now with AI built in"
+  description: "Notion AI lives inside the tool you already use for notes and docs. Summarise, draft, and reorganise without switching apps."
+  url: YOUR_NOTION_AFFILIATE_LINK
+  cta_text: Get Notion AI
