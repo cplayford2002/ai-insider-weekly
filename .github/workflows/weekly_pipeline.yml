@@ -34,11 +34,11 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          cd $GITHUB_WORKSPACE
-          pip install -r requirements.txt
+        working-directory: ${{ github.workspace }}
+        run: pip install openai requests requests-oauthlib
 
       - name: Create config from secrets
+        working-directory: ${{ github.workspace }}
         run: |
           mkdir -p config
           cat > config/config.json << 'CONFIGEOF'
@@ -70,7 +70,7 @@ jobs:
           restore-keys: issue-counter-
 
       - name: Run pipeline
-        working-directory: agents
+        working-directory: ${{ github.workspace }}/agents
         run: |
           mkdir -p ../logs ../drafts ../output/newsletters ../output/posts
           if [ "${{ github.event.inputs.auto_publish }}" = "true" ]; then
